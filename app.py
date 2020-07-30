@@ -5,7 +5,7 @@ import boto3
 
 session = boto3.Session(profile_name='personal')
 s3 = session.client('s3')
-BUCKET = "junhuis3test"
+BUCKETNAME = "junhuis3test"
 UPLOAD_FOLDER = ""
 app = Flask(__name__)
 
@@ -34,7 +34,7 @@ def list_files(bucket):
     Function to list files in a given S3 bucket
     """
     contents = []
-    for item in s3.list_objects(Bucket=bucket)['Contents']:
+    for item in s3.list_objects(Bucket=BUCKETNAME)['Contents']:
         contents.append(item)
 
     return contents
@@ -42,7 +42,7 @@ def list_files(bucket):
 
 @app.route("/")
 def storage():
-    contents = list_files("junhuis3test")
+    contents = list_files(BUCKETNAME)
     return render_template('storage.html', contents=contents)
 
 
@@ -50,15 +50,14 @@ def storage():
 def upload():
     if request.method == "POST":
         f = request.files['file']
-        f.save(os.path.join(UPLOAD_FOLDER, f.filename))
-        upload_file(f"{f.filename}", BUCKET)
+        upload_file(f"{f.filename}", BUCKETNAME)
 
         return redirect("/")
 
 @app.route("/download/<filename>", methods=['GET'])
 def download(filename):
     if request.method == 'GET':
-        output = download_file(filename, BUCKET)
+        output = download_file(filename, BUCKETNAME)
 
         return send_file(output, as_attachment=True)
 
