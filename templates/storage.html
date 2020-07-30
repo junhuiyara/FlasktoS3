@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>NO TITLE</title>
   </head>
   <body>
     <div class="content">
-        <h3>Flask Drive: S3 Flask Demo</h3>
         <p>Welcome to this AWS S3 Demo</p>
         <div>
           <h3>Upload your file here:</h3>
@@ -21,6 +19,14 @@
             {% for item in contents %}
               <li>
                 <a href="/download/{{ item.Key }}"> {{ item.Key }} </a>
+              </li>
+            {% endfor %}
+          </ul>
+          <p>delete</p>
+          <ul>
+            {% for item in contents %}
+              <li>
+                <a href="/delete/{{ item.Key }}"> {{ item.Key }} </a>
               </li>
             {% endfor %}
           </ul>
